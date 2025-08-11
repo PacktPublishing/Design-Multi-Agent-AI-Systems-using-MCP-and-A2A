@@ -1,0 +1,18 @@
+# AI-6 Slack Configuration File
+default_model_id = "gpt-4o"
+tools_dir = "${HOME}/git/ai-six/py/backend/tools"
+mcp_tools_dir = "${HOME}/git/ai-six/py/backend/mcp_tools"
+memory_dir = "${HOME}/git/ai-six/memory/slack"
+checkpoint_interval = 3
+
+# Provider configuration
+[provider_config.openai]
+api_key = "${OPENAI_API_KEY}"
+default_model = "gpt-4o"
+
+[provider_config.ollama]
+model = "qwen2.5-coder:32b"
+
+# Tool configuration
+[tool_config]
+# Empty for now

@@ -1,0 +1,11 @@
+openai
+sh
+slack_bolt
+python-dotenv
+mcp[cli]
+pathology
+chainlit
+ollama
+pyyaml
+toml
+debugpy
