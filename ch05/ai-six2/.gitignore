@@ -1,0 +1,8 @@
+.idea/
+.chainlit/
+.vscode/
+__pycache__/
+chainlit.md
+memory
+
+**/.claude/settings.local.json

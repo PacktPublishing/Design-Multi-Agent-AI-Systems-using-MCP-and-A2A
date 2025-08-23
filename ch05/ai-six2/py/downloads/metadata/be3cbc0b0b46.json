@@ -1,0 +1,12 @@
+{
+  "url": "https://api.github.com/users/the-gigi/repos?per_page=100&page=1",
+  "final_url": "https://api.github.com/users/the-gigi/repos?per_page=100&page=1",
+  "content_type": "application/json; charset=utf-8",
+  "content_length": 522782,
+  "encoding": "utf-8",
+  "fetch_time": "2025-08-15T15:07:40.310199",
+  "cached": false,
+  "etag": "W/\"2f89143d44e5702f0109072787fc7cfbeeec2e4a900133d03d03fd78105f3dff\"",
+  "file_hash": "sha256:be3cbc0b0b4603406b160976a63ea0164ff7dbba4fed55f4dbf1493b86b5339d",
+  "extension": "json"
+}
