@@ -1,0 +1,143 @@
+# Test Kubernetes manifests for MAKDO E2E testing
+# These resources create predictable failure scenarios
+
+---
+# ConfigMap with test scenario definitions
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: makdo-test-scenarios
+  namespace: makdo-test
+  labels:
+    app: makdo-e2e-test
+data:
+  scenarios.json: |
+    {
+      "scenarios": [
+        {
+          "name": "image_pull_failure",
+          "description": "Pod fails due to non-existent image",
+          "expected_events": ["Failed", "ErrImagePull", "ImagePullBackOff"],
+          "expected_alerts": ["pod failure", "image pull"]
+        },
+        {
+          "name": "crashloop_backoff",
+          "description": "Pod crashes repeatedly",
+          "expected_events": ["CrashLoopBackOff", "BackOff"],
+          "expected_alerts": ["crashloop", "restart"]
+        },
+        {
+          "name": "resource_constraints",
+          "description": "Pod cannot be scheduled due to resource limits",
+          "expected_events": ["FailedScheduling", "Insufficient"],
+          "expected_alerts": ["scheduling", "resources"]
+        },
+        {
+          "name": "readiness_failure",
+          "description": "Service fails readiness probes",
+          "expected_events": ["Unhealthy", "ProbeWarning"],
+          "expected_alerts": ["readiness", "health check"]
+        }
+      ]
+    }
+
+---
+# NetworkPolicy to test network issues (optional)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: makdo-test-network-policy
+  namespace: makdo-test
+spec:
+  podSelector:
+    matchLabels:
+      test: network-isolation
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress: []
+  egress: []
+
+---
+# ResourceQuota to limit test resource usage
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: makdo-test-quota
+  namespace: makdo-test
+spec:
+  hard:
+    pods: "50"
+    persistentvolumeclaims: "10"
+    services: "10"
+    secrets: "10"
+    configmaps: "10"
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+
+---
+# LimitRange to set default resource limits
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: makdo-test-limits
+  namespace: makdo-test
+spec:
+  limits:
+  - default:
+      cpu: 200m
+      memory: 256Mi
+    defaultRequest:
+      cpu: 100m
+      memory: 128Mi
+    type: Container
+  - max:
+      cpu: 1
+      memory: 2Gi
+    min:
+      cpu: 10m
+      memory: 32Mi
+    type: Container
+
+---
+# ServiceAccount for test pods
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: makdo-test-sa
+  namespace: makdo-test
+  labels:
+    app: makdo-e2e-test
+
+---
+# Role for test operations
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: makdo-test-role
+  namespace: makdo-test
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: makdo-test-binding
+  namespace: makdo-test
+subjects:
+- kind: ServiceAccount
+  name: makdo-test-sa
+  namespace: makdo-test
+roleRef:
+  kind: Role
+  name: makdo-test-role
+  apiGroup: rbac.authorization.k8s.io

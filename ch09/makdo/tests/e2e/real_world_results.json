@@ -1,0 +1,80 @@
+{
+  "test_type": "real_world_e2e",
+  "start_time": 1759016535.2568939,
+  "tests": {
+    "slack_channel_setup": {
+      "success": true,
+      "channel_id": "C09H2BHH0KZ",
+      "welcome_sent": true,
+      "message_received": true,
+      "recent_message_count": 1
+    },
+    "k8s_cluster_setup": {
+      "success": true,
+      "namespace": "makdo-test"
+    },
+    "failure_scenarios": {
+      "success": true,
+      "scenarios": {
+        "failing_pod": true,
+        "crashloop_pod": true,
+        "resource_starved": true,
+        "unhealthy_service": true,
+        "node_pressure": true
+      },
+      "successful_count": 5,
+      "failed_count": 0,
+      "success_rate": 1.0
+    },
+    "failure_detection": {
+      "success": true,
+      "failing_pods": [
+        "failing-app",
+        "resource-starved"
+      ],
+      "warning_events": [
+        "FailedScheduling",
+        "Failed",
+        "Unhealthy",
+        "BackOff"
+      ],
+      "pod_statuses": [
+        "crashloop-app:Running:{\"waiting\":{\"message\":\"back-off 20s restarting failed container=app pod=crashloop-app_makdo-test(d90c128f-2b26-40cd-891d-893e78899c8b)\",\"reason\":\"CrashLoopBackOff\"}}",
+        "failing-app:Pending:{\"waiting\":{\"message\":\"Back-off pulling image \\\"nonexistent-image:latest\\\": ErrImagePull: failed to pull and unpack image \\\"docker.io/library/nonexistent-image:latest\\\": failed to resolve reference \\\"docker.io/library/nonexistent-image:latest\\\": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed\",\"reason\":\"ImagePullBackOff\"}}",
+        "pressure-pod-0:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:40Z\"}}",
+        "pressure-pod-1:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:41Z\"}}",
+        "pressure-pod-2:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:42Z\"}}",
+        "pressure-pod-3:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:42Z\"}}",
+        "pressure-pod-4:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:43Z\"}}",
+        "pressure-pod-5:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:44Z\"}}",
+        "pressure-pod-6:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:44Z\"}}",
+        "pressure-pod-7:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:45Z\"}}",
+        "pressure-pod-8:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:46Z\"}}",
+        "pressure-pod-9:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:46Z\"}}",
+        "resource-starved:Pending:",
+        "unhealthy-service-65975c96dc-k9285:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:37Z\"}}",
+        "unhealthy-service-65975c96dc-l2pml:Running:{\"running\":{\"startedAt\":\"2025-09-27T23:42:36Z\"}}"
+      ],
+      "detection_successful": true
+    },
+    "system_status": {
+      "success": true,
+      "pods_output": "NAME                                 STATUS    RESTARTS   AGE\ncrashloop-app                        Running   2          2025-09-27T23:42:27Z\nfailing-app                          Pending   0          2025-09-27T23:42:24Z\npressure-pod-0                       Running   0          2025-09-27T23:42:39Z\npressure-pod-1                       Running   0          2025-09-27T23:42:39Z\npressure-pod-2                       Running   0          2025-09-27T23:42:39Z\npressure-pod-3                       Running   0          2025-09-27T23:42:40Z\npressure-pod-4                       Running   0          2025-09-27T23:42:40Z\npressure-pod-5                       Running   0          2025-09-27T23:42:40Z\npressure-pod-6                       Running   0          2025-09-27T23:42:40Z\npressure-pod-7                       Running   0          2025-09-27T23:42:40Z\npressure-pod-8                       Running   0          2025-09-27T23:42:40Z\npressure-pod-9                       Running   0          2025-09-27T23:42:40Z\nresource-starved                     Pending   <none>     2025-09-27T23:42:31Z\nunhealthy-service-65975c96dc-k9285   Running   0          2025-09-27T23:42:35Z\nunhealthy-service-65975c96dc-l2pml   Running   0          2025-09-27T23:42:35Z\n",
+      "events_output": "TYPE      REASON              MESSAGE\nNormal    Pulling             Pulling image \"nonexistent-image:latest\"\nNormal    Scheduled           Successfully assigned makdo-test/failing-app to makdo-test-control-plane\nWarning   Failed              Error: ImagePullBackOff\nWarning   Failed              Failed to pull image \"nonexistent-image:latest\": failed to pull and unpack image \"docker.io/library/nonexistent-image:latest\": failed to resolve reference \"docker.io/library/nonexistent-image:latest\": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed\nWarning   Failed              Error: ErrImagePull\nNormal    BackOff             Back-off pulling image \"nonexistent-image:latest\"\nNormal    Scheduled           Successfully assigned makdo-test/crashloop-app to makdo-test-control-plane\nNormal    Pulling             Pulling image \"busybox\"\nNormal    Pulled              Successfully pulled image \"busybox\" in 637ms (637ms including waiting). Image size: 1913388 bytes.\nNormal    Created             Created container: app\nNormal    Started             Started container app\nNormal    Pulled              Successfully pulled image \"busybox\" in 627ms (627ms including waiting). Image size: 1913388 bytes.\nWarning   BackOff             Back-off restarting failed container app in pod crashloop-app_makdo-test(d90c128f-2b26-40cd-891d-893e78899c8b)\nWarning   FailedScheduling    0/1 nodes are available: 1 Insufficient cpu, 1 Insufficient memory. preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.\nNormal    Scheduled           Successfully assigned makdo-test/unhealthy-service-65975c96dc-k9285 to makdo-test-control-plane\nNormal    Scheduled           Successfully assigned makdo-test/unhealthy-service-65975c96dc-l2pml to makdo-test-control-plane\nNormal    ScalingReplicaSet   Scaled up replica set unhealthy-service-65975c96dc from 0 to 2\nNormal    SuccessfulCreate    Created pod: unhealthy-service-65975c96dc-l2pml\nNormal    SuccessfulCreate    Created pod: unhealthy-service-65975c96dc-k9285\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"nginx\" in 634ms (634ms including waiting). Image size: 68869144 bytes.\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Started             Started container app\nNormal    Started             Started container app\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"nginx\" in 683ms (1.029s including waiting). Image size: 68869144 bytes.\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-2 to makdo-test-control-plane\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-1 to makdo-test-control-plane\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-0 to makdo-test-control-plane\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-4 to makdo-test-control-plane\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Pulled              Successfully pulled image \"nginx\" in 641ms (641ms including waiting). Image size: 68869144 bytes.\nNormal    Created             Created container: app\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-5 to makdo-test-control-plane\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-9 to makdo-test-control-plane\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-3 to makdo-test-control-plane\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-6 to makdo-test-control-plane\nNormal    Started             Started container app\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-8 to makdo-test-control-plane\nNormal    Scheduled           Successfully assigned makdo-test/pressure-pod-7 to makdo-test-control-plane\nNormal    Pulling             Pulling image \"nginx\"\nNormal    Pulled              Successfully pulled image \"nginx\" in 671ms (1.257s including waiting). Image size: 68869144 bytes.\nNormal    Started             Started container app\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"nginx\" in 647ms (1.848s including waiting). Image size: 68869144 bytes.\nWarning   Unhealthy           Readiness probe failed: HTTP probe failed with statuscode: 404\nNormal    Created             Created container: app\nNormal    Created             Created container: app\nNormal    Started             Started container app\nNormal    Pulled              Successfully pulled image \"nginx\" in 630ms (2.419s including waiting). Image size: 68869144 bytes.\nNormal    Started             Started container app\nNormal    Started             Started container app\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"nginx\" in 633ms (3.006s including waiting). Image size: 68869144 bytes.\nNormal    Pulled              Successfully pulled image \"nginx\" in 622ms (3.547s including waiting). Image size: 68869144 bytes.\nNormal    Started             Started container app\nNormal    Created             Created container: app\nNormal    Started             Started container app\nNormal    Pulled              Successfully pulled image \"nginx\" in 616ms (4.109s including waiting). Image size: 68869144 bytes.\nNormal    Created             Created container: app\nWarning   Unhealthy           Readiness probe failed: HTTP probe failed with statuscode: 404\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"nginx\" in 634ms (5.262s including waiting). Image size: 68869144 bytes.\nNormal    Started             Started container app\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"nginx\" in 651ms (4.693s including waiting). Image size: 68869144 bytes.\nNormal    Started             Started container app\nNormal    Started             Started container app\nNormal    Pulled              Successfully pulled image \"nginx\" in 663ms (5.87s including waiting). Image size: 68869144 bytes.\nNormal    Created             Created container: app\nNormal    Pulled              Successfully pulled image \"busybox\" in 625ms (3.147s including waiting). Image size: 1913388 bytes.\nWarning   Unhealthy           Liveness probe failed: HTTP probe failed with statuscode: 404\nWarning   Unhealthy           Liveness probe failed: HTTP probe failed with statuscode: 404\n",
+      "resource_usage": ""
+    },
+    "cleanup_and_summary": {
+      "success": true,
+      "final_success_rate": 1.0,
+      "overall_success": true
+    }
+  },
+  "end_time": 1759016598.998703,
+  "duration": 63.741809129714966,
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 6,
+    "success_rate": 1.0,
+    "overall_success": true
+  }
+}

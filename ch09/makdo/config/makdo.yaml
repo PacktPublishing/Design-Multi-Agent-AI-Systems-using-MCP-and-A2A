@@ -1,0 +1,47 @@
+# MAKDO Configuration - Basic setup for testing
+
+# Kubernetes Clusters Configuration
+clusters:
+  - name: "kind-k8s-ai"
+    context: "kind-k8s-ai"
+    kubeconfig_path: "~/.kube/config"
+    description: "Local kind cluster for k8s-ai testing"
+  - name: "kind-makdo-test"
+    context: "kind-makdo-test"
+    kubeconfig_path: "~/.kube/config"
+    description: "Test cluster for MAKDO multi-cluster demo"
+
+# k8s-ai A2A Server Configuration
+k8s_ai:
+  base_url: "http://localhost:9999"
+  admin_api_url: "http://localhost:9999/admin"
+
+# Slack Configuration
+slack:
+  bot_token: "${AI6_BOT_TOKEN}"
+  app_token: "${AI6_APP_TOKEN}"
+  channel: "#makdo-devops"
+  workspace: "bot-playground"
+
+# Agent Configuration
+agents:
+  coordinator:
+    name: "MAKDO Coordinator"
+    description: "Main orchestrator and task dispatcher"
+    model_id: "gpt-4o"
+    polling_interval: 60
+
+# Operational Parameters
+operations:
+  health_check_interval: 300
+  max_concurrent_operations: 3
+  require_approval_for:
+    - "delete"
+    - "scale down"
+    - "restart"
+    - "apply"
+
+# Logging
+logging:
+  level: "INFO"
+  format: "standard"

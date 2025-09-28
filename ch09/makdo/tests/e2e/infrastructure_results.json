@@ -1,0 +1,48 @@
+{
+  "test_type": "infrastructure",
+  "start_time": 1759015801.7305238,
+  "tests": {
+    "k8s_failure_simulation": {
+      "success": true,
+      "scenarios": {
+        "failing_pod": true,
+        "crashloop_pod": true,
+        "resource_starved": true,
+        "unhealthy_service": true
+      },
+      "success_rate": 1.0
+    },
+    "slack_integration": {
+      "success": true,
+      "skipped": true,
+      "reason": "No Slack token available"
+    },
+    "failure_detection_workflow": {
+      "success": true,
+      "pod_created": true,
+      "failure_detected": true,
+      "failing_pods": [
+        "failing-app",
+        "resource-starved"
+      ],
+      "relevant_events": [
+        "Failed",
+        "Failed",
+        "Failed",
+        "FailedScheduling"
+      ]
+    },
+    "cleanup_procedures": {
+      "success": false,
+      "namespace_deleted": false
+    }
+  },
+  "end_time": 1759015825.58131,
+  "duration": 23.850786209106445,
+  "summary": {
+    "total_tests": 4,
+    "passed_tests": 3,
+    "success_rate": 0.75,
+    "overall_success": false
+  }
+}

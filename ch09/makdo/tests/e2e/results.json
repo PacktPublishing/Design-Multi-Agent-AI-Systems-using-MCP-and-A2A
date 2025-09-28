@@ -1,0 +1,15 @@
+{
+  "start_time": "2025-09-27T16:21:33.301022",
+  "environment_setup": true,
+  "failure_scenarios": {
+    "failing_pod": true,
+    "crashloop_pod": true,
+    "resource_starved": true,
+    "unhealthy_service": true,
+    "node_pressure": true
+  },
+  "makdo_startup": false,
+  "detection_and_notification": {},
+  "remediation": {},
+  "success": false
+}

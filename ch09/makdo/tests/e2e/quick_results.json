@@ -1,0 +1,53 @@
+{
+  "test_type": "quick",
+  "start_time": 1759015094.064804,
+  "tests": {
+    "agent_creation": {
+      "success": true,
+      "output": "\ud83e\uddea Testing minimal AI-6 agent creation...\n\u2705 Config created: Test Agent\nOpenAI API key set: Yes\n\u2705 Agent created successfully!\nLLM providers: 1\n",
+      "error": null
+    },
+    "config_loading": {
+      "success": true,
+      "config_sections": [
+        "clusters",
+        "k8s_ai",
+        "slack",
+        "agents",
+        "operations",
+        "logging"
+      ],
+      "missing_sections": []
+    },
+    "k8s_connectivity": {
+      "success": true,
+      "clusters": {
+        "kind-k8s-ai": true,
+        "kind-makdo-test": true
+      }
+    },
+    "k8s_ai_server": {
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=9999): Max retries exceeded with url: /health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1101caed0>: Failed to establish a new connection: [Errno 61] Connection refused'))"
+    },
+    "slack_mcp_server": {
+      "success": true,
+      "binary_exists": true,
+      "binary_executable": true
+    },
+    "simple_failure_detection": {
+      "success": true,
+      "pod_created": true,
+      "pod_status": "Pending",
+      "failure_detected": true
+    }
+  },
+  "end_time": 1759015107.255269,
+  "duration": 13.190464973449707,
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 6,
+    "success_rate": 1.0,
+    "overall_success": true
+  }
+}

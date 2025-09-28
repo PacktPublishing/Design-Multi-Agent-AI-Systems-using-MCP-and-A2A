@@ -1,0 +1,85 @@
+# MAKDO Configuration Example
+# Copy to makdo.yaml and customize for your environment
+
+# Kubernetes Clusters Configuration
+clusters:
+  - name: "kind-k8s-ai"
+    context: "kind-k8s-ai"
+    kubeconfig_path: "~/.kube/config"
+    description: "Local kind cluster for k8s-ai testing"
+  - name: "kind-makdo-test"
+    context: "kind-makdo-test"
+    kubeconfig_path: "~/.kube/config"
+    description: "Test cluster for MAKDO multi-cluster demo"
+
+# k8s-ai A2A Server Configuration
+k8s_ai:
+  base_url: "http://localhost:9999"
+  # Session tokens will be registered dynamically
+  admin_api_url: "http://localhost:9999/admin"
+
+# Slack Configuration
+slack:
+  bot_token: "${AI6_BOT_TOKEN}"  # From environment or .env file
+  app_token: "${AI6_APP_TOKEN}"  # From environment or .env file
+  channel: "#makdo-devops"       # Dedicated channel for MAKDO
+  workspace: "bot-playground"
+
+# Agent Configuration
+agents:
+  coordinator:
+    name: "MAKDO Coordinator"
+    description: "Main orchestrator and task dispatcher for multi-cluster Kubernetes operations"
+    model_id: "gpt-4o"
+    polling_interval: 60  # seconds
+
+  analyzer:
+    name: "MAKDO Analyzer"
+    description: "Cluster health assessment and problem identification agent"
+    model_id: "gpt-4o"
+
+  fixer:
+    name: "MAKDO Fixer"
+    description: "Safe cluster modification and remediation agent"
+    model_id: "gpt-4o"
+    require_approval: true  # Require human approval for critical operations
+
+  slack:
+    name: "MAKDO Slack Bot"
+    description: "User communication and notification interface agent"
+    model_id: "gpt-4o"
+
+# Operational Parameters
+operations:
+  # Polling and monitoring
+  health_check_interval: 300  # seconds (5 minutes)
+  alert_threshold:
+    critical: 5    # minutes before escalating critical issues
+    warning: 15    # minutes before escalating warnings
+
+  # Safety constraints
+  max_concurrent_operations: 3
+  require_approval_for:
+    - "delete"
+    - "scale down"
+    - "restart"
+    - "apply"
+
+  # Cluster session management
+  session_ttl_hours: 24.0
+  auto_renew_sessions: true
+
+# Logging and Monitoring
+logging:
+  level: "INFO"
+  format: "json"
+  file: "logs/makdo.log"
+
+# MCP Servers
+mcp_servers:
+  slack:
+    command: "npx"
+    args: ["@korotovsky/slack-mcp-server"]
+    env:
+      SLACK_BOT_TOKEN: "${AI6_BOT_TOKEN}"
+      SLACK_TEAM_ID: "${SLACK_TEAM_ID}"  # Your workspace team ID
