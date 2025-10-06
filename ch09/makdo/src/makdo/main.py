@@ -39,8 +39,7 @@ def load_agent_config(agent_name: str) -> Dict[str, Any]:
 
 def create_coordinator_config() -> Config:
     """Create coordinator agent config with sub-agents."""
-    # Use AI-6's built-in config loading - use simplified config for testing
-    return Config.from_file("src/makdo/agents/coordinator_simple.yaml")
+    return Config.from_file("src/makdo/agents/coordinator.yaml")
 
 
 async def start_coordinator(agent: Agent):

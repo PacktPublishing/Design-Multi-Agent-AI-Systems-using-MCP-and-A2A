@@ -1,0 +1,74 @@
+{
+  "test_type": "demo_with_screenshots",
+  "start_time": 1759605916.0522811,
+  "tests": {
+    "welcome": {
+      "success": true
+    },
+    "environment": {
+      "success": true
+    },
+    "failures": {
+      "success": true,
+      "scenarios": {
+        "failing_pod": true,
+        "crashloop_pod": true,
+        "resource_starved": true,
+        "unhealthy_service": true
+      }
+    },
+    "detection": {
+      "success": true,
+      "failing_pods": [
+        "failing-app",
+        "resource-starved"
+      ],
+      "warning_events": [
+        "Unhealthy",
+        "BackOff",
+        "FailedScheduling",
+        "Failed"
+      ]
+    },
+    "status": {
+      "success": true
+    },
+    "summary": {
+      "success": true
+    }
+  },
+  "screenshots": [
+    {
+      "name": "01_demo_start",
+      "description": "MAKDO demo welcome message showing test scope and objectives",
+      "timestamp": 1759605926.879874
+    },
+    {
+      "name": "02_environment_setup",
+      "description": "Environment setup confirmation showing cluster and infrastructure details",
+      "timestamp": 1759605934.75315
+    },
+    {
+      "name": "03_failure_scenarios",
+      "description": "Failure scenarios created and reported to Slack",
+      "timestamp": 1759605956.7129312
+    },
+    {
+      "name": "04_failure_detection",
+      "description": "Failure detection results showing discovered issues",
+      "timestamp": 1759605979.934378
+    },
+    {
+      "name": "05_system_status",
+      "description": "Complete system status showing all pods and their states",
+      "timestamp": 1759605987.7864268
+    },
+    {
+      "name": "06_final_summary",
+      "description": "Final summary showing complete demo results and achievements",
+      "timestamp": 1759605995.545804
+    }
+  ],
+  "end_time": 1759605996.550514,
+  "duration": 80.4982328414917
+}
