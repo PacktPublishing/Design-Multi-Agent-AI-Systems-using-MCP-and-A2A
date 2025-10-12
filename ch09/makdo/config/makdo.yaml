@@ -31,9 +31,12 @@ agents:
     model_id: "gpt-4o"
     polling_interval: 60
 
+# Monitoring Configuration
+monitoring:
+  check_interval: 60  # Health check interval in seconds (can be overridden by MAKDO_CHECK_INTERVAL env var)
+
 # Operational Parameters
 operations:
-  health_check_interval: 300
   max_concurrent_operations: 3
   require_approval_for:
     - "delete"

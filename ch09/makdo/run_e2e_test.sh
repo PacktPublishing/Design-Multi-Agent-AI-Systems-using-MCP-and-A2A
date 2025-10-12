@@ -70,6 +70,19 @@ check_prerequisites() {
     success "Prerequisites check passed"
 }
 
+# Kill processes on specific ports
+kill_port_listeners() {
+    local ports=("$@")
+    for port in "${ports[@]}"; do
+        local pids=$(lsof -ti :$port 2>/dev/null)
+        if [[ -n "$pids" ]]; then
+            log "Killing processes on port $port: $pids"
+            echo "$pids" | xargs kill -9 2>/dev/null || true
+            sleep 1
+        fi
+    done
+}
+
 # Setup test clusters
 setup_clusters() {
     log "Setting up test clusters..."
@@ -103,30 +116,44 @@ setup_clusters() {
 start_services() {
     log "Starting supporting services..."
 
+    # Kill any processes on ports 9998 and 9999
+    log "Cleaning up ports 9998 and 9999..."
+    kill_port_listeners 9998 9999
+
     # Check if k8s-ai server is already running
-    if curl -s http://localhost:9999/health &> /dev/null; then
+    if curl -s http://localhost:9999/.well-known/agent.json &> /dev/null; then
         log "k8s-ai server already running"
     else
         log "Starting k8s-ai server..."
         if [[ -d "/Users/gigi/git/k8s-ai" ]]; then
             cd /Users/gigi/git/k8s-ai
-            nohup uv run k8s-ai-server --context kind-k8s-ai --port 9999 > /tmp/k8s-ai-server.log 2>&1 &
+
+            # Ensure k8s-ai venv exists and activate it
+            if [[ ! -d ".venv" ]]; then
+                log "Creating k8s-ai venv..."
+                uv sync
+            fi
+
+            # Use the venv's python directly
+            log "Launching k8s-ai-server with its own venv..."
+            nohup .venv/bin/python -m k8s_ai.server.main --context kind-k8s-ai --port 9999 > /tmp/k8s-ai-server.log 2>&1 &
             K8S_AI_PID=$!
             cd "$SCRIPT_DIR"
 
             # Wait for server to start
             log "Waiting for k8s-ai server to start..."
             for i in {1..30}; do
-                if curl -s http://localhost:9999/health &> /dev/null; then
+                if curl -s http://localhost:9999/.well-known/agent.json &> /dev/null; then
                     success "k8s-ai server started (PID: $K8S_AI_PID)"
                     break
                 fi
                 sleep 2
             done
 
-            if ! curl -s http://localhost:9999/health &> /dev/null; then
+            if ! curl -s http://localhost:9999/.well-known/agent.json &> /dev/null; then
                 error "k8s-ai server failed to start"
-                cat /tmp/k8s-ai-server.log
+                log "Checking server logs..."
+                cat /tmp/k8s-ai-server.log 2>/dev/null || log "No log file found"
                 exit 1
             fi
         else
@@ -195,6 +222,9 @@ cleanup() {
         fi
     fi
 
+    # Kill any processes on ports 9998 and 9999 to ensure clean shutdown
+    kill_port_listeners 9998 9999
+
     # Kill any remaining MAKDO processes
     pkill -f "makdo" 2>/dev/null || true
 
@@ -213,7 +243,7 @@ trap cleanup EXIT INT TERM
 
 # Parse command line arguments
 SKIP_SETUP=false
-KEEP_CLUSTERS=false
+KEEP_CLUSTERS=true  # Keep clusters by default for debugging
 VERBOSE=false
 
 while [[ $# -gt 0 ]]; do
@@ -222,7 +252,12 @@ while [[ $# -gt 0 ]]; do
             SKIP_SETUP=true
             shift
             ;;
+        --cleanup)
+            KEEP_CLUSTERS=false
+            shift
+            ;;
         --keep-clusters)
+            # Legacy flag for backwards compatibility
             KEEP_CLUSTERS=true
             shift
             ;;
@@ -235,7 +270,8 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --skip-setup     Skip cluster setup (assume clusters exist)"
-            echo "  --keep-clusters  Don't delete clusters after test"
+            echo "  --cleanup        Delete clusters after test (default: keep)"
+            echo "  --keep-clusters  Keep clusters after test (default, legacy flag)"
             echo "  --verbose        Enable verbose output"
             echo "  --help          Show this help message"
             exit 0
@@ -282,14 +318,14 @@ main() {
     # Step 5: Show results
     show_results
 
-    # Step 6: Cleanup clusters (unless keeping them)
-    if [[ "$KEEP_CLUSTERS" != "true" ]]; then
+    # Step 6: Cleanup clusters (if --cleanup flag was used)
+    if [[ "$KEEP_CLUSTERS" == "false" ]]; then
         log "Cleaning up test clusters..."
         kind delete cluster --name k8s-ai 2>/dev/null || true
         kind delete cluster --name makdo-test 2>/dev/null || true
         success "Test clusters cleaned up"
     else
-        log "Keeping test clusters as requested"
+        log "Keeping test clusters (use --cleanup to delete)"
     fi
 
     return $EXIT_CODE
