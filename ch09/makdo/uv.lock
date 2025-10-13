@@ -31,7 +31,8 @@ http-server = [
 
 [[package]]
 name = "ai-six"
-source = { directory = "../../../../ai-six/py" }
+version = "0.14.4"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "a2a-sdk", extra = ["http-server"] },
     { name = "anthropic" },
@@ -48,28 +49,10 @@ dependencies = [
     { name = "slack-bolt" },
     { name = "toml" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "a2a-sdk", extras = ["http-server"] },
-    { name = "anthropic" },
-    { name = "chainlit" },
-    { name = "debugpy", marker = "extra == 'dev'" },
-    { name = "kubernetes" },
-    { name = "mcp", specifier = ">=1.14.1" },
-    { name = "ollama" },
-    { name = "openai" },
-    { name = "pathology" },
-    { name = "pytest", marker = "extra == 'dev'" },
-    { name = "pytest-cov", marker = "extra == 'dev'" },
-    { name = "python-dotenv" },
-    { name = "pyyaml" },
-    { name = "requests" },
-    { name = "sh" },
-    { name = "slack-bolt" },
-    { name = "toml" },
+sdist = { url = "https://files.pythonhosted.org/packages/e7/55/f7b93082ed477c80c0035531e932448f6cc905e690cb1f6c79d7be823aba/ai_six-0.14.4.tar.gz", hash = "sha256:def3a9bbd12edfefcb9da21f74ceafa7f3e2b529fb1ad152a5fbc1b7059eb08b", size = 62234, upload-time = "2025-10-13T05:08:02.255Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/c0/7a18756b8b8a11f64ee7c77b238681a68a373108f5e4ed2f6004d15e057a/ai_six-0.14.4-py3-none-any.whl", hash = "sha256:caf4f3eff695baa8d04dd7900539abb132b72b0e8cb7b2d8de847565d5933045", size = 99774, upload-time = "2025-10-13T05:08:01.095Z" },
 ]
-provides-extras = ["dev"]
 
 [[package]]
 name = "aiofiles"
@@ -900,7 +883,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ai-six", directory = "../../../../ai-six/py" },
+    { name = "ai-six", specifier = "==0.14.4" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
 ]
