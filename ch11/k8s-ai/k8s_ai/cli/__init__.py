@@ -1,0 +1,1 @@
+"""CLI interface for k8s-ai."""

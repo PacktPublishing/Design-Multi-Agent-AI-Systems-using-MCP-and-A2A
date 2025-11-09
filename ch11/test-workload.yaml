@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-workload
+---
+# A pod that will crashloop - missing required environment variable
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crashloop-pod
+  namespace: test-workload
+  labels:
+    app: crashloop-test
+spec:
+  containers:
+  - name: app
+    image: busybox:latest
+    command: ["sh", "-c"]
+    args:
+      - |
+        if [ -z "$REQUIRED_VAR" ]; then
+          echo "ERROR: REQUIRED_VAR not set"
+          exit 1
+        fi
+        echo "Running successfully"
+        sleep 3600
+---
+# A pod with an image that doesn't exist
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imagepull-pod
+  namespace: test-workload
+  labels:
+    app: imagepull-test
+spec:
+  containers:
+  - name: app
+    image: nonexistent-registry.example.com/fake-image:v1.0.0
+    command: ["sleep", "3600"]
+---
+# A healthy pod for comparison
+apiVersion: v1
+kind: Pod
+metadata:
+  name: healthy-pod
+  namespace: test-workload
+  labels:
+    app: healthy-test
+spec:
+  containers:
+  - name: app
+    image: nginx:alpine
+    ports:
+    - containerPort: 80

@@ -1,0 +1,30 @@
+# MAKDO Configuration for dual-cluster deployment
+# Control cluster manages worker cluster
+
+# Kubernetes Clusters Configuration
+clusters:
+  - name: "makdo-worker"
+    context: "kind-makdo-worker"
+    kubeconfig_path: "/root/.kube/config"
+    description: "Worker cluster managed by MAKDO"
+
+# k8s-ai A2A Server Configuration
+k8s_ai:
+  base_url: "http://host.docker.internal:8100"
+  admin_api_url: "http://host.docker.internal:8100/admin"
+
+# Slack Configuration
+slack:
+  bot_token: "${AI6_BOT_TOKEN}"
+  app_token: "${AI6_APP_TOKEN}"
+  channel: "#makdo-devops"
+  workspace: "bot-playground"
+
+# Monitoring Configuration
+monitoring:
+  check_interval: 120  # seconds between health checks
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "json"

@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: makdo-config
+  namespace: default
+data:
+  makdo.yaml: |
+    # MAKDO Configuration for dual-cluster deployment
+    # Control cluster manages worker cluster
+
+    # Kubernetes Clusters Configuration
+    clusters:
+      - name: "makdo-worker"
+        context: "kind-makdo-worker"
+        kubeconfig_path: "/root/.kube/config"
+        description: "Worker cluster managed by MAKDO"
+
+    # k8s-ai A2A Server Configuration
+    k8s_ai:
+      base_url: "http://host.docker.internal:8100"
+      admin_api_url: "http://host.docker.internal:8100/admin"
+
+    # Slack Configuration
+    slack:
+      bot_token: "${AI6_BOT_TOKEN}"
+      app_token: "${AI6_APP_TOKEN}"
+      channel: "#makdo-devops"
+      workspace: "bot-playground"
+
+    # Monitoring Configuration
+    monitoring:
+      check_interval: 120  # seconds between health checks
+
+    # Logging Configuration
+    logging:
+      level: "INFO"
+      format: "json"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: makdo
+  namespace: default
+  labels:
+    app: makdo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: makdo
+  template:
+    metadata:
+      labels:
+        app: makdo
+    spec:
+      containers:
+      - name: makdo
+        image: makdo:latest
+        imagePullPolicy: Never
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: makdo-secrets
+              key: openai-api-key
+        - name: AI6_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: makdo-secrets
+              key: slack-bot-token
+        - name: AI6_APP_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: makdo-secrets
+              key: slack-app-token
+        - name: SLACK_TEAM_ID
+          valueFrom:
+            secretKeyRef:
+              name: makdo-secrets
+              key: slack-team-id
+        - name: MAKDO_CHECK_INTERVAL
+          value: "120"
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        - name: kubeconfig
+          mountPath: /root/.kube
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      volumes:
+      - name: config
+        configMap:
+          name: makdo-config
+      - name: kubeconfig
+        configMap:
+          name: makdo-kubeconfig
+      restartPolicy: Always

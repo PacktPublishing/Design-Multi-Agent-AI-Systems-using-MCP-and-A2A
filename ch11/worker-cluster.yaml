@@ -1,0 +1,24 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: makdo-worker
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "cluster-role=worker"
+  extraPortMappings:
+  # Port for k8s-ai A2A server
+  - containerPort: 30100
+    hostPort: 8100
+    protocol: TCP
+  # Port for k8s-ai Admin API
+  - containerPort: 30099
+    hostPort: 8099
+    protocol: TCP
+  # Port for exposing problematic workloads (for testing)
+  - containerPort: 30200
+    hostPort: 8200
+    protocol: TCP

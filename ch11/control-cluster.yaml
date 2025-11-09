@@ -1,0 +1,20 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: makdo-control
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "cluster-role=control"
+  extraPortMappings:
+  # Port for accessing MAKDO API/dashboard if needed
+  - containerPort: 30080
+    hostPort: 8080
+    protocol: TCP
+  # Port for MAKDO health check endpoint
+  - containerPort: 30090
+    hostPort: 9090
+    protocol: TCP

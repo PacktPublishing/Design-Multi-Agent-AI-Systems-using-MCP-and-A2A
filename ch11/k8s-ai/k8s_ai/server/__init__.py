@@ -1,0 +1,1 @@
+"""A2A server interface for k8s-ai."""

@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-ai
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-ai-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "services", "nodes", "namespaces", "events"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: k8s-ai-reader-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k8s-ai-reader
+subjects:
+- kind: ServiceAccount
+  name: k8s-ai
+  namespace: default
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: k8s-ai-api-keys
+  namespace: default
+type: Opaque
+stringData:
+  keys.json: |
+    {
+      "api_keys": [
+        {
+          "key": "${K8S_AI_API_KEY}",
+          "name": "MAKDO Client",
+          "created": "2025-01-01T00:00:00"
+        }
+      ]
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-ai
+  namespace: default
+  labels:
+    app: k8s-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-ai
+  template:
+    metadata:
+      labels:
+        app: k8s-ai
+    spec:
+      serviceAccountName: k8s-ai
+      containers:
+      - name: k8s-ai
+        image: k8s-ai:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9999
+          name: a2a
+          protocol: TCP
+        - containerPort: 9998
+          name: admin
+          protocol: TCP
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: k8s-ai-secrets
+              key: openai-api-key
+        volumeMounts:
+        - name: keys
+          mountPath: /app/keys.json
+          subPath: keys.json
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /.well-known/agent.json
+            port: 9999
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /.well-known/agent.json
+            port: 9999
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: keys
+        secret:
+          secretName: k8s-ai-api-keys
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-ai
+  namespace: default
+  labels:
+    app: k8s-ai
+spec:
+  type: NodePort
+  selector:
+    app: k8s-ai
+  ports:
+  - name: a2a
+    protocol: TCP
+    port: 9999
+    targetPort: 9999
+    nodePort: 30100
+  - name: admin
+    protocol: TCP
+    port: 9998
+    targetPort: 9998
+    nodePort: 30099
