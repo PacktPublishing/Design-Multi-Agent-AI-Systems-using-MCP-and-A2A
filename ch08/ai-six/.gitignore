@@ -1,0 +1,12 @@
+.idea/
+.chainlit/
+.vscode/
+__pycache__/
+chainlit.md
+memory
+.files
+**/.claude/settings.local.json
+.python-version
+docs/_build
+docs/api
+

@@ -1,0 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+pip-wheel-metadata/
+
+# Virtual environment
+venv/
+.venv/
+env/
+.python-version
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# MyPy type checker cache
+.mypy_cache/
+
+# VS Code settings
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Logs and local debug files
+*.log
+logs/
+debug.log
+
+# IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+workspace.xml
+.idea_modules/
+
+# JetBrains specific files (PyCharm/WebStorm/IntelliJ)
+.idea/
+*.iml
+out/
+shelf/
+
+# Environment files
+**/.env
+**/.env.*
+
+# Chainlit
+**/.chailit
+**/.files
+**/cainlit.md
+
+# Frontend config files
+frontend/**/config.*
+
+downloads
+

@@ -1,0 +1,34 @@
+default_model_id: gpt-5
+tools_dirs:
+  - ${HOME}/git/ai-six/py/backend/tools
+mcp_tools_dirs:
+  - ${HOME}/git/ai-six/py/backend/mcp_tools
+memory_dir: ${HOME}/git/ai-six/memory/github-analyzer
+checkpoint_interval: 3
+provider_config:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+  ollama:
+      model: qwen2.5-coder:32b
+enabled_tools:
+  - gh
+system_prompt: |
+  You are a GitHub expert analyst. Your task is to analyze the GitHub user '{username}' 
+  and provide a comprehensive report on their activity, contributions, and profile.
+
+  For this analysis, you should:
+  1. Get the user's profile information
+  2. List their repositories (both owned and contributed to)
+  3. Analyze their recent activity and contributions  
+  4. Look at their most popular/starred repositories
+  5. Check their following/followers if public
+  6. Summarize their coding languages and technologies used
+
+  Use the gh CLI tool to gather all necessary information. Structure your final report clearly with:
+  - User Profile Summary
+  - Repository Analysis  
+  - Activity & Contributions
+  - Technologies & Languages
+  - Key Insights and Observations
+
+  Be thorough but concise in your analysis.

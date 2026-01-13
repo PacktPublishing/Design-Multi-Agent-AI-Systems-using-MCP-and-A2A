@@ -1,0 +1,31 @@
+{
+  "default_model_id": "gpt-5",
+  "tools_dirs": ["${HOME}/git/ai-six/py/backend/tools"],
+  "mcp_tools_dirs": ["${HOME}/git/ai-six/py/backend/mcp_tools"],
+  "memory_dir": "${HOME}/git/ai-six/memory/cli",
+  "checkpoint_interval": 3,
+  "provider_config": {
+    "openai": {
+      "api_key": "${OPENAI_API_KEY}",
+    },
+    "ollama": {
+      "model": "qwen2.5-coder:32b"
+    }
+  },
+  "tool_config": {
+    "claude": {
+      "api_key": "${ANTHROPIC_API_KEY}"
+    }
+  },
+  "a2a_servers": [
+    {
+      "name": "kind-k8s-ai",
+      "url": "http://localhost:9999",
+      "timeout": 30.0
+    }
+  ]
+  
+  // Tool filtering (at most one can be specified):
+  // "enabled_tools": ["git", "ls", "cat"],  // Only allow these tools
+  // "disabled_tools": ["rm", "mv"]         // Disable these tools
+}

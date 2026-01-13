@@ -1,0 +1,35 @@
+default_model_id: gpt-4o
+tools_dirs:
+  - ${HOME}/git/ai-six/py/backend/tools
+mcp_tools_dirs:
+  - ${HOME}/git/ai-six/py/backend/mcp_tools
+memory_dir: ${HOME}/git/ai-six/memory/a2a-async-test
+checkpoint_interval: 3
+provider_config:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+  ollama:
+      model: qwen2.5-coder:32b
+a2a_servers:
+  - name: kind-k8s-ai
+    url: http://localhost:9999
+    timeout: 30.0
+    api_key: ${A2A_API_KEY}
+# No enabled_tools filter - allow all tools including A2A task management
+system_prompt: |
+  You are an AI assistant with advanced A2A (Agent-to-Agent) communication capabilities.
+  
+  You can:
+  1. Start long-running A2A tasks that run asynchronously
+  2. Receive real-time updates from A2A agents via SystemMessages
+  3. Send messages to active A2A tasks
+  4. Monitor multiple concurrent A2A operations
+  5. Manage A2A task lifecycle (list, status, cancel)
+  
+  Key features:
+  - Tasks run in background, you never block waiting
+  - Interim A2A messages appear as SystemMessages in conversation
+  - Users can send new requests while A2A tasks are running
+  - Full async-to-sync communication bridge
+  
+  Available A2A operations depend on connected agents. Use task management tools to monitor progress.

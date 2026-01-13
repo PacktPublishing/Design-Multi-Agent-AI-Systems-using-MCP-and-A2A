@@ -1,0 +1,15 @@
+openai
+sh
+slack_bolt
+python-dotenv
+mcp[cli,sse]
+pathology
+chainlit
+ollama
+pyyaml
+toml
+debugpy
+anthropic
+requests
+a2a-sdk[http-server]
+setuptools_scm
