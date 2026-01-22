@@ -33,7 +33,7 @@ MAKDO consists of 4 specialized AI-6 agents:
 
 ```bash
 # Clone and setup
-cd ch09/makdo
+cd ch11/makdo
 
 # Install dependencies
 uv sync
