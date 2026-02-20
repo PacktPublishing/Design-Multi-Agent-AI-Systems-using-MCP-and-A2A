@@ -121,9 +121,9 @@ This helps avoid errors that may occur from copying and pasting code.
 
 
 <details>
-  <summary><h2>Get to know Authors</h2></summary>
+  <summary><h2>Get to know Author</h2></summary>
 
-_Gigi Sayfan_  Gigi Sayfan is a member of the AI agents infra team at Perplexity, focused on building large-scale environments and harnesses for AI agents. He brings over 30 years of software development experience across domains, including instant messaging, chip fabrication process control, embedded multimedia for game consoles, brain-inspired machine learning, custom browser development, web services for distributed 3D game platforms, IoT sensors, and virtual reality. He has written production code in Go, Python, Java, C#, C++, and TypeScript/JavaScript. His expertise includes AI agents, generative AI, cloud-native technologies, DevOps, databases, networking, and distributed systems. Gigi has authored books and articles on Kubernetes and microservices.
+_Gigi Sayfan_ is a member of the AI agents infra team at Perplexity, focused on building large-scale environments and harnesses for AI agents. He brings over 30 years of software development experience across domains, including instant messaging, chip fabrication process control, embedded multimedia for game consoles, brain-inspired machine learning, custom browser development, web services for distributed 3D game platforms, IoT sensors, and virtual reality. He has written production code in Go, Python, Java, C#, C++, and TypeScript/JavaScript. His expertise includes AI agents, generative AI, cloud-native technologies, DevOps, databases, networking, and distributed systems. Gigi has authored books and articles on Kubernetes and microservices.
 
 
 
