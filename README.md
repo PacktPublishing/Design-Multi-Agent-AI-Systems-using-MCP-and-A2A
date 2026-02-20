@@ -22,7 +22,7 @@ Gigi Sayfan</p>
 <details open>
   <summary><h2>About the book</summary>
 <a href="https://www.packtpub.com/en-in/product/design-multi-agent-ai-systems-using-mcp-and-a2a-9781806116478">
-<img src="https://content.packt.com/B34286/cover_image_small.jpg" alt="Design Multi-Agent AI Systems Using MCP and A2A, First Edition" height="256px" align="right">
+<img src="https://content.packt.com/B34286/cover_image_small.jpg" alt="Design Multi-Agent AI Systems Using MCP and A2A, First Edition" height="1500px" align="right">
 </a>
 
 Frustrated by opaque agent frameworks that hide how things work? This book gives you complete control by guiding you through building a fully functional, extensible agentic AI framework in Python without relying on external orchestration tools.
